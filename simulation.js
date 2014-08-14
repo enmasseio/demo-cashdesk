@@ -18,9 +18,6 @@ var logger = new Logger({
     return timer.getTime().toISOString();
   }
 });
-logger.on('log', function (log) {
-  console.log(JSON.stringify(log))
-});
 
 var host = new distribus.Host();
 var messagebus = new actors.DistribusMessageBus({
@@ -36,4 +33,26 @@ cashier.open(supermarket.cashDesks[0]);
 var customer = new Customer('Thomas', {logger: logger, timer: timer});
 customer.connect(messagebus);
 
-customer.planShopping(supermarket);
+/**
+ * Start the simulation
+ */
+exports.start = function () {
+  logger.log({event: 'start'});
+
+  customer.planShopping(supermarket);
+};
+
+/**
+ * Register a listener for log messages
+ * @param {string} event Available events: 'log'
+ * @param {function} callback
+ */
+exports.on = logger.on.bind(logger);
+
+/**
+ * Retrieve all logs
+ * @returns {Array}
+ */
+exports.logs = function () {
+  return logger.logs;
+};
