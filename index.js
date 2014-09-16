@@ -11,6 +11,7 @@ server.listen(PORT);
 console.log('Server listening on http://localhost:' + PORT);
 
 app.use('/', express.static(__dirname + '/client'));
+app.use('/node_modules/', express.static(__dirname + '/node_modules'));
 
 io.on('connection', function (socket) {
   // emit all logs from history

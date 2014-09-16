@@ -25,12 +25,12 @@
     "moment": "^2.8.1",
     "promise": "^5.0.0",
     "react": "^0.11.1",
-    "simple-actors": "^2.0.0",
+    "evejs": "^0.4.0",
     "socket.io": "^1.0.6"
   },
   "devDependencies": {},
   "scripts": {
-    "simulation": "node simulation.js"
+    "simulation": "node ./index.js"
   },
-  "main": "./simulation.js"
+  "main": "./index.js"
 }
