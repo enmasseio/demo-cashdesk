@@ -20,16 +20,19 @@ io.on('connection', function (socket) {
   });
 });
 
-simulation.on('log', function (log) {
-  console.log(JSON.stringify(log));
-
+function broadcast (event, data) {
   // emit to all connected clients
   var connections = io.sockets.connected;
   for (var id in connections) {
     if (connections.hasOwnProperty(id)) {
-      connections[id].emit('log', log);
+      connections[id].emit(event, data);
     }
   }
+}
+
+simulation.on('log', function (log) {
+  console.log('log', JSON.stringify(log));
+  broadcast('log', log);
 });
 
 simulation.start();

@@ -8,15 +8,13 @@ var LogTable = React.createClass({
     return {data: []};
   },
   render: function() {
-    var FIELDS = ['timestamp', 'simTime', 'prototype', 'id', 'event'];
+    var FIELDS = ['seq', 'timestamp', 'simTime', 'prototype', 'id', 'event'];
 
     var search = this.refs.query && this.refs.query.getDOMNode().value.trim() || '';
     var query = this.state.query;
 
     var filteredData = this.state.data;
-    var queryStyle = {
-      color: 'black'
-    };
+    var queryStyle = {};
     try {
       if (query) {
         query = $objeq(search);
@@ -44,6 +42,7 @@ var LogTable = React.createClass({
     var rows = filteredData.map(function (log) {
       return (
           <tr>
+            <td>{log.seq}</td>
             <td>{log.timestamp}</td>
             <td>{log.simTime}</td>
             <td>{log.prototype}</td>
@@ -57,18 +56,20 @@ var LogTable = React.createClass({
     return (
         <div>
         <p>
-        Query: <input ref="query" onChange={this.onSearch} style={queryStyle} />
+        Query: <input ref="query" onChange={this.onSearch} className="query" style={queryStyle} />
         </p>
         <p>
-            Example queries:
+            Example queries (see <a href="https://github.com/agilosoftware/objeq/blob/master/doc/Language-Reference.md" target="_blanc">here</a> for a full reference):
             <pre><code>
               '^T' =~ id<br/>
               timestamp >= '2014-09-18T09:27:25.927Z'<br/>
               event == 'create'<br/>
+              order by timestamp desc<br/>
             </code></pre>
         </p>
         <table className="logs">
           <tr>
+            <th>seq</th>
             <th>timestamp</th>
             <th>simTime</th>
             <th>prototype</th>
@@ -95,7 +96,12 @@ var table = React.renderComponent(
 // listen for log events
 socket.on('log', function (log) {
   console.log(log);
-  logs.push(log);
 
+  // clear logs on simulation start
+  if (log && log.event === 'start') {
+    logs = [];
+  }
+
+  logs.push(log);
   table.setState({data: logs});
 });
