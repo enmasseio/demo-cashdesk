@@ -1,22 +1,18 @@
 <!doctype html>
 <html>
 <head>
+  <title>CashDesk Simulation</title>
+
+  <script src="node_modules/objeq/objeq.min.js"></script>
   <script src="node_modules/react/dist/react.js"></script>
   <script src="node_modules/react/dist/JSXTransformer.js"></script>
   <script src="socket.io/socket.io.js"></script>
-  <script type="text/jsx" src="client.js"></script>
+
+  <script type="text/jsx" src="app.js"></script>
+  <link rel="stylesheet" href="app.css">
 </head>
 <body>
-see console...
-<script>
-  var socket = io.connect(location.href);
-
-  socket.on('log', function (log) {
-    console.log(log);
-  });
-</script>
-
-<div id="example"></div>
-
+<h1>CashDesk Simulation</h1>
+<div id="content"></div>
 </body>
 </html>

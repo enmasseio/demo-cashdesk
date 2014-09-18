@@ -12,7 +12,7 @@ eve.system.timer = hypertimer({rate: 'discrete'});
 
 // TODO: use default eve.system.logger as soon as eve supports logging itself
 eve.system.logger = new Logger({
-  realTime: function () {
+  timestamp: function () {
     return new Date().toISOString();
   },
   simTime: function () {
