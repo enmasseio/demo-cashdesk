@@ -99,7 +99,7 @@ var LogTable = React.createClass({
     this.setState({query: query});
   },
   clearSearch: function () {
-    this.setState({query: null});
+    this.setState({query: ''});
   },
   select: function (event) {
     if (event.nativeEvent.ctrlKey) {
