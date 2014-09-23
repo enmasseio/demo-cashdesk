@@ -24,8 +24,10 @@ var simulation = {};
 
 Emitter(simulation);
 
-// TODO: use default eve.system.timer as soon as it's implemented in eve itself
-eve.system.timer = hypertimer({rate: 'discrete'});
+// configure eve
+eve.system.init ({
+  timer: {rate: 'discrete'}
+});
 
 // TODO: use default eve.system.logger as soon as eve supports logging itself
 var seq = 0;

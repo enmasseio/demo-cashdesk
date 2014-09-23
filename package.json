@@ -19,7 +19,7 @@
     "chance": "^0.5.9",
     "distribus": "^0.3.0",
     "emitter-component": "^1.1.1",
-    "evejs": "^0.4.0",
+    "evejs": "^0.4.2",
     "express": "^4.8.3",
     "hypertimer": "^1.1.0",
     "lodash": "^2.4.1",
