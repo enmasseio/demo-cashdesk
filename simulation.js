@@ -3,7 +3,6 @@ var fs = require('fs');
 var eve = require('evejs');
 var hypertimer = require('hypertimer');
 var Emitter = require('emitter-component');
-var seed = require('seed-random');
 
 var Logger = require('./lib/Logger');
 var CashDesk = require('./lib/CashDesk');
@@ -11,22 +10,27 @@ var Cashier = require('./lib/Cashier');
 var Customer = require('./lib/Customer');
 var Supermarket = require('./lib/Supermarket');
 
-// names collected from http://listofrandomnames.com/
-var NAMES = String(fs.readFileSync('./data/FakeNameGenerator.com_06f4692d.csv'))
+// names collected from http://fakenamegenerator.com/
+var NAMES = String(fs.readFileSync('./data/names.txt'))
     .split('\n')
     .map(function (name) {
       return name.trim();
     });
 NAMES.shift(); // first entry is the header "GivenName"
 
-var random = seed('some seed');
 var simulation = {};
 
 Emitter(simulation);
 
 // configure eve
 eve.system.init ({
-  timer: {rate: 'discrete'}
+  timer: {
+    rate: 'discrete',
+    deterministic: true
+  },
+  random: {
+    deterministic: true
+  }
 });
 
 // TODO: use default eve.system.logger as soon as eve supports logging itself
@@ -53,7 +57,7 @@ eve.system.logger.on('log', function (data) {
  * @param {Object} existing  An object with the existing names as key of the object.
  */
 function getUniqueName(existing) {
-  var name = NAMES[Math.floor(random() * NAMES.length)];
+  var name = NAMES[Math.floor(eve.system.random() * NAMES.length)];
   var nameIndexed = name;
   var index = 1;
   while (nameIndexed in existing) {
@@ -101,7 +105,7 @@ simulation.start = function (config) {
   for (i = 0; i < customerCount; i++) {
     name = getUniqueName(all);
     var customer = new Customer(name, {
-      groceries: Math.round(10 + 10 * random())
+      groceries: Math.round(10 + 10 * eve.system.random())
     });
     customers[name] = customer;
     all[name] = customer;
