@@ -12,12 +12,13 @@ To run the simulation, install the project dependencies once:
     
 And run the simulation:
 
-    node index.js --cashiers 4 --customers 100
+    node index.js --cashiers 4 --customers 100 --weeks 8
     
 Available command line arguments:
  
 - `--cashiers` 
 - `--customers`
+- `--weeks`
 - `--no-server`  (a server is started by default)
 - `--no-logging` (all events are logged by default)
 

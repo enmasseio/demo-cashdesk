@@ -74,8 +74,9 @@ function getUniqueName(existing) {
 simulation.start = function (config) {
   simulation.emit('start');
 
-  var customerCount = config && config.customers || 10;
-  var cashierCount  = config && config.cashiers  || 2;
+  var customerCount = config && config.customers  || 10;
+  var cashierCount  = config && config.cashiers   || 2;
+  var weeks         = config && config.weeks      || 8;
 
   eve.system.logger.log({
     event: 'start',
@@ -111,6 +112,7 @@ simulation.start = function (config) {
   for (i = 0; i < customerCount; i++) {
     name = getUniqueName(all);
     var customer = new Customer(name, {
+      weeks: weeks,
       groceries: Math.round(10 + 10 * eve.system.random())
     });
     customers[name] = customer;
