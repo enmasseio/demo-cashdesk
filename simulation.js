@@ -93,7 +93,13 @@ simulation.start = function (config) {
   var cashiers = {};
   for (i = 0; i < cashierCount; i++) {
     name = getUniqueName(all);
-    var cashier = new Cashier(name);
+    var mean = Math.round(2 + 8 * eve.system.random()) * 1000; // ms
+    var cashier = new Cashier(name, {
+      scanDuration: {
+        mean: mean,   // ms
+        dev: mean / 2 // ms
+      }
+    });
     cashiers[name] = cashier;
     all[name] = cashier;
 
