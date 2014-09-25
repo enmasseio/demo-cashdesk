@@ -4,6 +4,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var argv = require('yargs').argv;
 var startServer = argv['server'] !== false;
+var doLogging = argv['logging'] !== false;
 
 var simulation = require('./simulation');
 
@@ -31,15 +32,19 @@ if (startServer) {
     }
   }
 
-  simulation.on('log', function (log) {
-    broadcast('log', log);
-  });
+  if (doLogging) {
+    simulation.on('log', function (log) {
+      broadcast('log', log);
+    });
+  }
 }
 else {
   // log to the console
-  simulation.on('log', function (log) {
-    console.log('log', JSON.stringify(log));
-  });
+  if (doLogging) {
+    simulation.on('log', function (log) {
+      console.log('log', JSON.stringify(log));
+    });
+  }
 }
 
 simulation.start(argv);

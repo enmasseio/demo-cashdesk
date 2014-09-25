@@ -18,7 +18,8 @@ Available command line arguments:
  
 - `--cashiers` 
 - `--customers`
-- `--no-server` True by default.
+- `--no-server`  (a server is started by default)
+- `--no-logging` (all events are logged by default)
 
 
 View the simulation results in the browser:
