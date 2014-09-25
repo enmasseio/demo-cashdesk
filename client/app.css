@@ -6,13 +6,21 @@ table.logs {
   border-collapse: collapse;
 }
 
+table.logs tr:nth-child(even) {
+  background: #f5f5f5;
+}
+
 table.logs th,
 table.logs td {
   text-align: left;
-  border: 1px solid lightgray;
+  border: 1px solid #e5e5e5;
   padding: 2px 10px;
   max-width: 600px;
   overflow: auto;
+}
+
+table.logs th {
+  background: #e5e5e5;
 }
 
 input {

@@ -95,7 +95,7 @@ var LogTable = React.createClass({
         );
   },
   search: function () {
-    var query = this.refs.query && this.refs.query.getDOMNode().value.trim() || '';
+    var query = this.refs.query && this.refs.query.getDOMNode().value || '';
     this.setState({query: query});
   },
   clearSearch: function () {
