@@ -103,7 +103,7 @@ simulation.start = function (config) {
     cashiers[name] = cashier;
     all[name] = cashier;
 
-    cashier.open(supermarket.cashDesks[0]);
+    cashier.open(supermarket.cashDesks[i]);
   }
 
   // create customers
