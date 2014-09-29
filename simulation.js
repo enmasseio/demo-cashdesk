@@ -116,6 +116,27 @@ simulation.start = function (config) {
     busyCustomers--;
     if (busyCustomers <= 0) {
       eve.system.logger.log({event: 'end'});
+
+      if (config.stats !== false) {
+        // write a document with the simulation stats
+        mkdirSync('stats');
+        var stats = {
+          cashierCount: cashierCount,
+          customerCount: customerCount,
+          weeks: weeks,
+          cashiers: Object.keys(cashiers).map(function (id) {
+            return cashiers[id].toJSON()
+          }),
+          customers: []
+        };
+        for (var id in customers) {
+          if (customers.hasOwnProperty(id)) {
+            stats.customers.push(customers[id].getStats());
+          }
+        }
+        var name = './stats/' + new Date().toISOString() + '.json';
+        fs.writeFileSync(name, JSON.stringify(stats, null, 2));
+      }
     }
   }
 
@@ -125,7 +146,8 @@ simulation.start = function (config) {
     name = getUniqueName(all);
     var customer = new Customer(name, {
       weeks: weeks,
-      groceries: Math.round(10 + 10 * eve.system.random())
+      //groceries: Math.round(10 + 10 * eve.system.random())
+      groceries: 10
     });
     customer.on('done', done);
     customers[name] = customer;
@@ -142,5 +164,14 @@ simulation.start = function (config) {
 simulation.logs = function () {
   return eve.system.logger.logs;
 };
+
+// http://stackoverflow.com/a/24311711/1262753
+function mkdirSync(path) {
+  try {
+    fs.mkdirSync(path);
+  } catch(e) {
+    if ( e.code != 'EEXIST' ) throw e;
+  }
+}
 
 module.exports = simulation;

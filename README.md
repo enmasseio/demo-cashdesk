@@ -21,6 +21,7 @@ Available command line arguments:
 - `--weeks`
 - `--no-server`  (a server is started by default)
 - `--no-logging` (all events are logged by default)
+- `--no-stats`   (all stats are saved in a file in `./stats/` by default)
 
 
 View the simulation results in the browser:
