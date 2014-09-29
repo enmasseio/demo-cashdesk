@@ -128,7 +128,7 @@ var LogTable = React.createClass({
       var index = [].indexOf.call(target.parentNode.children, target);
       var field = COLUMNS[index];
       var value = target.innerHTML;
-      var query = field + ' == ' + '"' + value + '"';
+      var query = '"' + value + '" =~ ' + field;
 
       if (field) {
         this.setState({query: query});

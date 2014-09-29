@@ -110,6 +110,15 @@ simulation.start = function (config) {
     cashier.open(supermarket.cashDesks[i]);
   }
 
+  // keep track on how many customers are still running
+  var busyCustomers = customerCount;
+  function done() {
+    busyCustomers--;
+    if (busyCustomers <= 0) {
+      eve.system.logger.log({event: 'end'});
+    }
+  }
+
   // create customers
   var customers = {};
   for (i = 0; i < customerCount; i++) {
@@ -118,6 +127,7 @@ simulation.start = function (config) {
       weeks: weeks,
       groceries: Math.round(10 + 10 * eve.system.random())
     });
+    customer.on('done', done);
     customers[name] = customer;
     all[name] = customer;
 
