@@ -14,16 +14,14 @@
     "url": "git://github.com/enmasseio/demo-cashdesk.git"
   },
   "dependencies": {
-    "babble": "^0.9.0",
     "brain": "^0.7.0",
     "chance": "^0.5.9",
-    "distribus": "^0.3.0",
     "emitter-component": "^1.1.1",
-    "evejs": "^0.4.2",
+    "evejs": "^0.4.3",
     "express": "^4.8.3",
-    "hypertimer": "^1.1.0",
     "lodash": "^2.4.1",
     "moment": "^2.8.1",
+    "node-uuid": "^1.4.1",
     "objeq": "^0.6.1",
     "promise": "^5.0.0",
     "react": "^0.11.1",

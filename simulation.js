@@ -1,7 +1,6 @@
 var fs = require('fs');
 
 var eve = require('evejs');
-var hypertimer = require('hypertimer');
 var Emitter = require('emitter-component');
 
 var Logger = require('./lib/Logger');
@@ -24,6 +23,9 @@ Emitter(simulation);
 
 // configure eve
 eve.system.init ({
+  transports: [
+    {type: 'local'}
+  ],
   timer: {
     rate: 'discrete',
     deterministic: true
@@ -81,7 +83,8 @@ simulation.start = function (config) {
   eve.system.logger.log({
     event: 'start',
     cashiers: cashierCount,
-    customers: customerCount
+    customers: customerCount,
+    weeks: weeks
   });
 
   // create a supermarket with cashdesks

@@ -27,12 +27,33 @@ var LogTable = React.createClass({
       };
     }
 
+    function formatDuration(duration) {
+      if (duration < 1000) return duration + 'ms';
+      if (duration < 60 * 1000) return Math.round(duration / 1000) + 's';
+      if (duration < 60 * 60 * 1000) return Math.round(duration / 60 / 1000) + 'm';
+      if (duration < 24 * 60 * 60 * 1000) return Math.round(duration / 60 / 60 / 1000) + 'h';
+      return Math.round(duration / 24 / 60 / 60 / 1000) + 'd';
+    }
+
+    function durationsToSeconds(durations) {
+      var formatted = {};
+      for (var d in durations) {
+        if (durations.hasOwnProperty(d)) {
+          formatted[d] = formatDuration(durations[d]);
+        }
+      }
+      return formatted;
+    }
+
     function details (log) {
       var extra = {};
       for (var prop in log) {
         if (log.hasOwnProperty(prop)) {
           if (COLUMNS.indexOf(prop) === -1) {
             extra[prop] = log[prop];
+            if (prop == 'durations') {
+             extra[prop] = durationsToSeconds(extra[prop]);
+            }
           }
         }
       }
@@ -71,7 +92,7 @@ var LogTable = React.createClass({
         <p>
             Example queries (see <a href="https://github.com/agilosoftware/objeq/blob/master/doc/Language-Reference.md" target="_blanc">here</a> for a full reference):
             <pre><code>
-              '^T' =~ id<br/>
+              'shop' =~ event<br/>
               timestamp >= '2014-09-18T09:27:25.927Z'<br/>
               event == 'create'<br/>
               order by timestamp desc<br/>
