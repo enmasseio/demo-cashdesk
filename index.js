@@ -17,11 +17,6 @@ if (startServer) {
   app.use('/', express.static(__dirname + '/client'));
   app.use('/node_modules/', express.static(__dirname + '/node_modules'));
 
-  io.on('connection', function (socket) {
-    // emit all logs from history
-    socket.emit('logs', simulation.logs());
-  });
-
   function broadcast (event, data) {
     // emit to all connected clients
     var connections = io.sockets.connected;
@@ -32,11 +27,14 @@ if (startServer) {
     }
   }
 
-  if (doLogging) {
-    simulation.on('log', function (log) {
-      broadcast('log', log);
-    });
-  }
+  io.on('connection', function (socket) {
+    // emit all logs from history
+    socket.emit('logs', simulation.logs());
+  });
+
+  simulation.on('log', function (log) {
+    broadcast('log', log);
+  });
 }
 else {
   // log to the console

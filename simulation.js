@@ -8,6 +8,7 @@ var CashDesk = require('./lib/CashDesk');
 var Cashier = require('./lib/Cashier');
 var Customer = require('./lib/Customer');
 var Supermarket = require('./lib/Supermarket');
+var util = require('./lib/util');
 
 // names collected from http://fakenamegenerator.com/
 var NAMES = String(fs.readFileSync('./data/names.txt'))
@@ -76,15 +77,18 @@ function getUniqueName(existing) {
 simulation.start = function (config) {
   simulation.emit('start');
 
+  var startTime = new Date().toISOString();
   var customerCount = config && config.customers  || 10;
   var cashierCount  = config && config.cashiers   || 2;
   var weeks         = config && config.weeks      || 8;
+  var strategy      = config && config.strategy   || 'random';
 
   eve.system.logger.log({
     event: 'start',
     cashiers: cashierCount,
     customers: customerCount,
-    weeks: weeks
+    weeks: weeks,
+    strategy: strategy
   });
 
   // create a supermarket with cashdesks
@@ -117,13 +121,16 @@ simulation.start = function (config) {
     if (busyCustomers <= 0) {
       eve.system.logger.log({event: 'end'});
 
-      if (config.stats !== false) {
-        // write a document with the simulation stats
-        mkdirSync('stats');
-        var stats = {
+      if (config.results !== false) {
+        // write a document with the simulation results
+        mkdirSync('results');
+        var results = {
+          startTime: startTime,
           cashierCount: cashierCount,
           customerCount: customerCount,
           weeks: weeks,
+          strategy: strategy,
+          summary: null,
           cashiers: Object.keys(cashiers).map(function (id) {
             return cashiers[id].toJSON()
           }),
@@ -131,11 +138,22 @@ simulation.start = function (config) {
         };
         for (var id in customers) {
           if (customers.hasOwnProperty(id)) {
-            stats.customers.push(customers[id].getStats());
+            results.customers.push(customers[id].getStats());
           }
         }
-        var name = './stats/' + new Date().toISOString() + '.json';
-        fs.writeFileSync(name, JSON.stringify(stats, null, 2));
+
+        results.summary = util.stats(results.customers.map(function (customer) {
+          return {
+            collect: customer.durations.collect.mean,
+            queue: customer.durations.queue.mean,
+            scan: customer.durations.scan.mean,
+            pay: customer.durations.pay.mean,
+            total: customer.durations.total.mean
+          }
+        }));
+
+        var name = './results/' + startTime + '.json';
+        fs.writeFileSync(name, JSON.stringify(results, null, 2));
       }
     }
   }
@@ -147,7 +165,9 @@ simulation.start = function (config) {
     var customer = new Customer(name, {
       weeks: weeks,
       //groceries: Math.round(10 + 10 * eve.system.random())
-      groceries: 10
+      groceries: 10,
+      strategy: config.strategy,
+      explorationRate: 0.1
     });
     customer.on('done', done);
     customers[name] = customer;
