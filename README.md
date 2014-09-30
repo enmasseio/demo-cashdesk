@@ -33,10 +33,16 @@ And run the simulation:
     
 Available command line arguments:
  
-- `--cashiers` 
-- `--customers`
-- `--weeks`
-- `--strategy`     
+- `--cashiers`  
+  The number of cashiers in the SuperMarket.
+
+- `--customers`  
+  The number of customers that go shopping every Saturday morning.
+
+- `--weeks`  
+  The number of weeks to simulate shopping.
+
+- `--strategy`  
   Strategy of customers for selecting a queue: 
   
   - "random" (default) 
